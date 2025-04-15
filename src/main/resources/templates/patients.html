@@ -2,24 +2,23 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-
+    <title>Liste des Patients</title>
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.5/css/bootstrap.min.css">
 </head>
 <body>
-<div class="p-3" >
+<div class="p-3">
     <div class="card">
         <div class="card-header">Liste des Patients</div>
         <div class="card-body">
-            <form method="get" th:action="@{/index}">
-                <div>
-                <label>Keyword</label>
-                    <input type="text" name="keyword" >
-                    <button type="submit" class="btn btn-info"></button>
+            <form method="get" th:action="@{/index}" class="mb-3">
+                <div class="input-group">
+                    <label class="input-group-text" for="keyword">Keyword</label>
+                    <input type="text" id="keyword" name="keyword" class="form-control" th:value="${keyword}">
+                    <button type="submit" class="btn btn-info">Search</button>
                 </div>
+            </form>
 
-            </form>
-            </form>
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -27,26 +26,31 @@
                     <th>Date de Naissance</th>
                     <th>Malade</th>
                     <th>Score</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="p : ${ListPatients}">
-                    <td th:text="${p.id}"></td>
-                    <td th:text="${p.nom}"></td> <!-- Correction ici -->
-                    <td th:text="${p.dateNaissance}"></td>
-                    <td th:text="${p.malade}"></td>
-                    <td th:text="${p.score}"></td>
+                    <td th:text="${p.id}">1</td>
+                    <td th:text="${p.nom}">Nom</td>
+                    <td th:text="${p.dateNaissance}">Date</td>
+                    <td th:text="${p.malade}">Malade</td>
+                    <td th:text="${p.score}">Score</td>
                     <td>
-                       <a onclick="return confirm('Etes vous sure')" th:href="@{delete(id=${p.id})}" class="btn btn-danger">Delete</a>
+                        <a onclick="return confirm('Êtes-vous sûr ?')"
+                           th:href="@{/delete(id=${p.id})}"
+                           class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
                 </tbody>
             </table>
+
             <ul class="nav nav-pills">
-                <li th:each="v,item:${pages}">
-                    <a th:href="@{/index(page=${item.index},keyword=${Keyword})}"
-                       th:class="${(currentPage==item.index)? 'btn  btn-info ms-1':'btn btn-outline-info ms-1'}"
-                       th:text="${item.index}"></a>
+                <li class="nav-item" th:each="v, item : ${pages}">
+                    <a class="nav-link"
+                       th:href="@{/index(page=${item.index}, keyword=${keyword})}"
+                       th:classappend="${(currentPage == item.index) ? 'active' : ''}"
+                       th:text="${item.index}">1</a>
                 </li>
             </ul>
         </div>
